@@ -1,0 +1,33 @@
+
+class Node:
+    def __init__(self, value):
+        self.__set_value(value)
+
+    def __str__(self):
+        return "Node Value:" + str(self.__value)
+
+    def __set_value(self, value):
+        if not isinstance(value, int):
+            raise ValueError("Value must be int")
+        self.__value = value
+
+    def setValue(self, value):
+        self.__set_value(value)
+
+    def getValue(self):
+        return self.__value
+
+    def __lt__(self, other):
+        if isinstance(other, Node):
+            return self.__value < other.__value
+        return NotImplemented
+
+    def __gt__(self, other):
+        if isinstance(other, Node):
+            return self.__value > other.__value
+        return NotImplemented
+
+    def __eq__(self, other):
+        if isinstance(other, Node):
+            return self.__value == other.__value
+        return NotImplemented
