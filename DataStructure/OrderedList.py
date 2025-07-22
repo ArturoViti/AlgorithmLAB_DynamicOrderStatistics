@@ -18,7 +18,7 @@ class OrderedList:
 
         current = self.head
         while current.getNext() is not None and current.getNext() < new_node:
-            current = current.next
+            current = current.getNext()
 
         new_list_node.setNext(current.getNext())
         current.setNext(new_list_node)
