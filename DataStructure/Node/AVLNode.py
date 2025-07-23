@@ -2,7 +2,11 @@ from DataStructure.Node.TreeNode import TreeNode
 
 
 class AVLNode(TreeNode):
-    def __init__(self, value, left_node=None, right_node=None):
+    """
+        AVLNoide class to represent a TreeNode but has a height and size to build AVL Data Structure
+    """
+
+    def __init__(self, value: int, left_node: Node = None, right_node: Node = None):
         super().__init__(value)
         self.__left_node = left_node
         self.__right_node = right_node
@@ -23,14 +27,14 @@ class AVLNode(TreeNode):
     def getSize(self):
         return self.__size
 
-    def setLeft(self, left_node):
+    def setLeft( self, left_node: Node ):
         self.__left_node = left_node
 
-    def setRight(self, right_node):
+    def setRight( self, right_node: Node ):
         self.__right_node = right_node
 
-    def setHeight(self, height):
+    def setHeight( self, height: Node ):
         self.__height = height
 
-    def setSize(self, size):
+    def setSize( self, size: int ):
         self.__size = size
