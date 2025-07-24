@@ -1,7 +1,11 @@
+from typing import Any
+
 from DataStructure.Node.Node import Node
 from DataStructure.Node.ListNode import ListNode
+from DataStructure.OrderStatisticsStructure import OrderStatisticStructure
 
-class OrderedList:
+
+class OrderedList(OrderStatisticStructure):
     """
         OrderedList is a linked list of Node elements, where each node points to the next one,
         maintaining the elements in ascending order by value.
@@ -63,3 +67,31 @@ class OrderedList:
             values.append(str(current.getValue()))
             current = current.getNext()
         return " -> ".join(values)
+
+    # Order Statistics Algorithm
+    def OSSelect( self, i: int ) -> Node:
+        if i < 1:
+            raise IndexError("Index must be >= 1")
+
+        current = self.head
+        position = 1
+
+        while current is not None:
+            if position == i:
+                return current
+            current = current.getNext()
+            position += 1
+
+        raise IndexError("Index out of range")
+
+    def OSRank( self, x: ListNode ) -> int | None:
+        current = self.head
+        position = 1
+
+        while current is not None:
+            if current == x:
+                return position
+            current = current.getNext()
+            position += 1
+
+        return None

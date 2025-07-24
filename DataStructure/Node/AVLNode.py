@@ -4,7 +4,7 @@ from DataStructure.Node.TreeNode import TreeNode
 
 class AVLNode(TreeNode):
     """
-        AVLNoide class to represent a TreeNode but has a height and size to build AVL Data Structure
+        AVLNode class to represent a TreeNode but has a height and size to build AVL Data Structure
     """
 
     def __init__(self, value: int, left_node: Node = None, right_node: Node = None):

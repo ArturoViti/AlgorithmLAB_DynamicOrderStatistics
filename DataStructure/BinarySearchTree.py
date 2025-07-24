@@ -90,3 +90,12 @@ class BinarySearchTree:
         result += "    " * level + f"--> {node.getValue()}\n"
         result += self._tree_to_string(node.getLeft(), level + 1)
         return result
+
+    # Order Statistics Algorithm
+    def OSSelect( self, i: int ):
+        # @TODO
+        pass
+
+    def OSRank( self, x: TreeNode ) -> int:
+        # @TODO
+        pass

@@ -206,3 +206,26 @@ class AVLTree:
             + str(node.getSize())}\n"
         result += self._tree_to_string(node.getLeft(), level + 1)
         return result
+
+
+    # Order Statistics Algorithm
+    def OSSelect( self, i: int ) -> Node:
+        return self._os_select(self.root, i)
+
+    def _os_select( self, node: AVLNode, i: int ) -> AVLNode | None:
+        rank = (node.getLeft().size if node.getLeft() else 0) + 1
+
+        if i == rank:
+            return node
+        elif i < rank:
+            return self._os_select( node.getLeft(), i )
+        else:
+            return self._os_select( node.getRight(), i - rank )
+
+    def OSRank( self, x: AVLNode ) -> int:
+        rank = (x.getLeft().size if x.getLeft() else 0) + 1
+        node = x
+        # @TODO: Add Parent to AVL Node
+        return 0
+        # while node != self.root:
+        #    if node == node.
