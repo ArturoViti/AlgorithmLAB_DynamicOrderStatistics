@@ -1,3 +1,4 @@
+from DataStructure.Node.Node import Node
 from DataStructure.Node.TreeNode import TreeNode
 
 
@@ -33,7 +34,7 @@ class AVLNode(TreeNode):
     def setRight( self, right_node: Node ):
         self.__right_node = right_node
 
-    def setHeight( self, height: Node ):
+    def setHeight( self, height: int ):
         self.__height = height
 
     def setSize( self, size: int ):

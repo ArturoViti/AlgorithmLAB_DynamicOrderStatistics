@@ -21,17 +21,17 @@ class Node:
         return self.__value
 
     # Enables intuitive comparison between Node instances using <, >, and == operators
-    def __lt__( self, other: Node ):
+    def __lt__( self, other ):
         if isinstance(other, Node):
             return self.__value < other.__value
         return NotImplemented
 
-    def __gt__( self, other: Node ):
+    def __gt__( self, other ):
         if isinstance(other, Node):
             return self.__value > other.__value
         return NotImplemented
 
-    def __eq__( self, other: Node ):
+    def __eq__( self, other ):
         if isinstance(other, Node):
             return self.__value == other.__value
         return NotImplemented
