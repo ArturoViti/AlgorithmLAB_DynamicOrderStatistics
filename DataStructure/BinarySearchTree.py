@@ -91,11 +91,66 @@ class BinarySearchTree:
         result += self._tree_to_string(node.getLeft(), level + 1)
         return result
 
+    def _subtree_size(self, node: TreeNode) -> int:
+        """
+            Return the size of the subtree rooted at `node`.
+
+            Parameters:
+                node (TreeNode): The root of the subtree.
+
+            Returns:
+                int: Number of nodes in the subtree.
+        """
+        if not node:
+            return 0
+        return 1 + self._subtree_size(node.getLeft()) + self._subtree_size(node.getRight())
+
     # Order Statistics Algorithm
-    def OSSelect( self, i: int ):
-        # @TODO
-        pass
+    def OSSelect( self, i: int ) -> TreeNode | None:
+        """
+            Return the i-th smallest node (with rank i in an inorder traversal)
+
+            Parameters:
+                i (int): Index
+
+            Returns:
+                TreeNode | None: The corresponding node or None if out of bounds.
+        """
+        def _os_select(node: TreeNode, i: int) -> TreeNode | None:
+            if not node:
+                return None
+            left = node.getLeft()
+            left_size = self._subtree_size(left)
+
+            if i == left_size + 1:
+                return node
+            elif i <= left_size:
+                return _os_select(left, i)
+            else:
+                return _os_select(node.getRight(), i - left_size - 1)
+
+        return _os_select(self.root, i)
 
     def OSRank( self, x: TreeNode ) -> int:
-        # @TODO
-        pass
+        """
+            Return the rank (1-based index in inorder traversal) of node x.
+
+            Parameters:
+                x (TreeNode): The node whose rank we want to find.
+
+            Returns:
+                int: The rank of the node.
+        """
+        def _os_rank( node: TreeNode, target: TreeNode, acc: int = 0 ) -> int:
+            if not node:
+                return 0
+
+            if target.getValue() < node.getValue():
+                return _os_rank(node.getLeft(), target, acc)
+            elif target.getValue() > node.getValue():
+                left_size = self._subtree_size(node.getLeft())
+                return _os_rank(node.getRight(), target, acc + left_size + 1)
+            else:
+                return acc + self._subtree_size(node.getLeft()) + 1
+
+        return _os_rank(self.root, x)

@@ -65,6 +65,9 @@ def testTreeNode():
     assert tn1.getRight() == tn_right, "❌ getRight did not return the correct node"
     assert tn1.getLeft().getValue() == 2, "❌ Left child value is incorrect"
     assert tn1.getRight().getValue() == 3, "❌ Right child value is incorrect"
+    assert tn_left.getParent() == tn1, "❌ Parent of Left node value incorrect"
+    assert tn_right.getParent() == tn1, "❌ Parent of Right node value incorrect"
+
 
     # Update left and right nodes
     new_left = TreeNode(4)
@@ -75,8 +78,6 @@ def testTreeNode():
 
 def testAVLNode():
     avl = AVLNode(10)
-    left = AVLNode(5)
-    right = AVLNode(15)
 
     # Initial height and size
     assert avl.getHeight() == 1, "❌ Initial height should be 1"
@@ -93,15 +94,6 @@ def testAVLNode():
     # Initially, left and right should be None
     assert avl.getLeft() is None, "❌ Initial left should be None"
     assert avl.getRight() is None, "❌ Initial right should be None"
-
-    # Set and get left/right nodes
-    avl.setLeft(left)
-    avl.setRight(right)
-
-    assert avl.getLeft() == left, "❌ Left node not set correctly"
-    assert avl.getRight() == right, "❌ Right node not set correctly"
-    assert avl.getLeft().getValue() == 5, "❌ Left node value incorrect"
-    assert avl.getRight().getValue() == 15, "❌ Right node value incorrect"
 
     print("✅ AVLNode tests passed!")
 

@@ -19,7 +19,7 @@ class AVLTree:
 
 
     @staticmethod
-    def height(node: AVLNode):
+    def height( node: AVLNode ):
         if not node:
             return 0
         return node.getHeight()
@@ -87,11 +87,11 @@ class AVLTree:
         right_size = current_node.getRight().getSize() if current_node.getRight() else 0
         current_node.setSize(1 + left_size + right_size)
 
-        # Left rotation
+        # Right rotation
         if balance > 1 and new_node < current_node.getLeft():
             return self._right_rotate(current_node)
 
-        # Right rotation
+        # Left rotation
         if balance < -1 and new_node > current_node.getRight():
             return self._left_rotate(current_node)
 
@@ -209,11 +209,11 @@ class AVLTree:
 
 
     # Order Statistics Algorithm
-    def OSSelect( self, i: int ) -> Node:
+    def OSSelect( self, i: int ) -> AVLNode:
         return self._os_select(self.root, i)
 
     def _os_select( self, node: AVLNode, i: int ) -> AVLNode | None:
-        rank = (node.getLeft().size if node.getLeft() else 0) + 1
+        rank = (node.getLeft().getSize() if node.getLeft() else 0) + 1
 
         if i == rank:
             return node
@@ -222,10 +222,14 @@ class AVLTree:
         else:
             return self._os_select( node.getRight(), i - rank )
 
+
     def OSRank( self, x: AVLNode ) -> int:
-        rank = (x.getLeft().size if x.getLeft() else 0) + 1
+        rank = (x.getLeft().getSize() if x.getLeft() else 0) + 1
         node = x
-        # @TODO: Add Parent to AVL Node
-        return 0
-        # while node != self.root:
-        #    if node == node.
+
+        while node != self.root:
+           if node == node.getParent().getRight():
+               rank += node.getParent().getLeft().getSize() + 1
+           node = node.getParent()
+
+        return rank
