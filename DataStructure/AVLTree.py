@@ -24,6 +24,12 @@ class AVLTree:
             return 0
         return node.getHeight()
 
+    @staticmethod
+    def size( node: AVLNode ):
+        if not node:
+            return 0
+        return node.getSize()
+
 
     def balance( self, node: AVLNode ) -> int:
         """
@@ -58,7 +64,7 @@ class AVLTree:
         self.root = self._insert_recursive(self.root, avl_node)
 
 
-    def _insert_recursive(self, current_node: AVLNode, new_node: AVLNode) -> AVLNode:
+    def _insert_recursive(self, current: AVLNode, new_node: AVLNode) -> AVLNode:
         """
             Helper method to recursively insert a node and rebalance the subtree.
 
@@ -70,83 +76,82 @@ class AVLTree:
                 AVLNode: The root of the balanced subtree.
        """
 
-        if not current_node:
+        if current is None:
             return new_node
-        elif new_node < current_node:
-            current_node.setLeft( self._insert_recursive(current_node.getLeft(), new_node) )
+
+        if new_node <= current:
+            current.setLeft(self._insert_recursive(current.getLeft(), new_node))
+        elif new_node > current:
+            current.setRight(self._insert_recursive(current.getRight(), new_node))
         else:
-            current_node.setRight( self._insert_recursive(current_node.getRight(), new_node) )
+            return current
 
-        left_height = current_node.getLeft().getHeight() if current_node.getLeft() else 0
-        right_height = current_node.getRight().getHeight() if current_node.getRight() else 0
-        current_node.setHeight(1 + max(left_height, right_height))
+        left = current.getLeft()
+        right = current.getRight()
+        lh = left.getHeight() if left else 0
+        rh = right.getHeight() if right else 0
+        current.setHeight(1 + max(lh, rh))
 
-        balance = self.balance(current_node)
+        ls = left.getSize() if left else 0
+        rs = right.getSize() if right else 0
+        current.setSize(1 + ls + rs)
 
-        left_size = current_node.getLeft().getSize() if current_node.getLeft() else 0
-        right_size = current_node.getRight().getSize() if current_node.getRight() else 0
-        current_node.setSize(1 + left_size + right_size)
+        balance = lh - rh
 
-        # Right rotation
-        if balance > 1 and new_node < current_node.getLeft():
-            return self._right_rotate(current_node)
+        # LL
+        if balance > 1 and new_node < left:
+            return self._right_rotate(current)
+        # RR
+        if balance < -1 and new_node > right:
+            return self._left_rotate(current)
+        # LR
+        if balance > 1 and new_node > left:
+            current.setLeft(self._left_rotate(left))
+            return self._right_rotate(current)
+        # RL
+        if balance < -1 and new_node < right:
+            current.setRight(self._right_rotate(right))
+            return self._left_rotate(current)
 
-        # Left rotation
-        if balance < -1 and new_node > current_node.getRight():
-            return self._left_rotate(current_node)
-
-        # Left-Right rotation
-        if balance > 1 and new_node > current_node.getLeft():
-            current_node.setLeft( self._left_rotate(current_node.getLeft()) )
-            return self._right_rotate(current_node)
-
-        # Right-Left rotation
-        if balance < -1 and new_node < current_node.getRight():
-            current_node.right = self._right_rotate(current_node.getRight())
-            return self._left_rotate(current_node)
-
-        return current_node
+        return current
 
 
-    def _left_rotate(self, z: AVLNode) -> AVLNode:
+    def _left_rotate(self,y: AVLNode) -> AVLNode:
         """
             Perform a left rotation around the given node.
 
             Parameters:
-                z (AVLNode): The root of the subtree to rotate.
+                y (AVLNode): The root of the subtree to rotate.
 
             Returns:
                 AVLNode: The new root of the rotated subtree.
         """
 
-        y = z.getRight()
-        T2 = y.getLeft()
+        x = y.getRight()
+        T2 = x.getLeft()
 
-        y.setLeft(z)
-        z.setRight(T2)
+        # Perform rotation
+        x.setLeft(y)
+        y.setRight(T2)
+
+        x.setParent(y.getParent())
+        y.setParent(x)
+        if T2:
+            T2.setParent(y)
 
         # Update heights
-        z_left_height = z.getLeft().getHeight() if z.getLeft() else 0
-        z_right_height = z.getRight().getHeight() if z.getRight() else 0
-        z.setHeight(1 + max(z_left_height, z_right_height))
+        y.setHeight( 1 + max(self.height(y.getLeft()), self.height(y.getRight())) )
+        x.setHeight( 1 + max(self.height(x.getLeft()), self.height(x.getRight())) )
 
-        y_left_height = y.getLeft().getHeight() if y.getLeft() else 0
-        y_right_height = y.getRight().getHeight() if y.getRight() else 0
-        y.setHeight(1 + max(y_left_height, y_right_height))
+        # Update Sizes
+        y.setSize( 1 + self.size(y.getLeft()) + self.size(y.getRight()) )
+        x.setSize( 1 + self.size(x.getLeft()) + self.size(x.getRight()) )
 
-        # Update sizes
-        z_left_size = z.getLeft().getSize() if z.getLeft() else 0
-        z_right_size = z.getRight().getSize() if z.getRight() else 0
-        z.setSize(1 + z_left_size + z_right_size)
-
-        y_left_size = y.getLeft().getSize() if y.getLeft() else 0
-        y_right_size = y.getRight().getSize() if y.getRight() else 0
-        y.setSize(1 + y_left_size + y_right_size)
-
-        return y
+        # Return new root
+        return x
 
 
-    def _right_rotate(self, z: AVLNode) -> AVLNode:
+    def _right_rotate(self, x: AVLNode) -> AVLNode:
         """
             Perform a right rotation around the given node.
 
@@ -156,30 +161,25 @@ class AVLTree:
             Returns:
                 AVLNode: The new root of the rotated subtree.
         """
+        y = x.getLeft()
+        T2 = y.getRight()
 
-        y = z.getLeft()
-        T3 = y.getRight()
+        # Perform rotation
+        y.setRight(x)
+        x.setLeft(T2)
 
-        y.setRight(z)
-        z.setLeft(T3)
+        y.setParent(x.getParent())
+        x.setParent(y)
+        if T2:
+            T2.setParent(x)
 
         # Update heights
-        z_left_height = z.getLeft().getHeight() if z.getLeft() else 0
-        z_right_height = z.getRight().getHeight() if z.getRight() else 0
-        z.setHeight(1 + max(z_left_height, z_right_height))
-
-        y_left_height = y.getLeft().getHeight() if y.getLeft() else 0
-        y_right_height = y.getRight().getHeight() if y.getRight() else 0
-        y.setHeight(1 + max(y_left_height, y_right_height))
+        x.setHeight( 1 + max(self.height(x.getLeft()), self.height(x.getRight())) )
+        y.setHeight( 1 + max(self.height(y.getLeft()), self.height(y.getRight())) )
 
         # Update sizes
-        z_left_size = z.getLeft().getSize() if z.getLeft() else 0
-        z_right_size = z.getRight().getSize() if z.getRight() else 0
-        z.setSize(1 + z_left_size + z_right_size)
-
-        y_left_size = y.getLeft().getSize() if y.getLeft() else 0
-        y_right_size = y.getRight().getSize() if y.getRight() else 0
-        y.setSize(1 + y_left_size + y_right_size)
+        x.setSize( 1 + self.size(x.getLeft()) + self.size(x.getRight()) )
+        y.setSize( 1 + self.size(y.getLeft()) + self.size(y.getRight()) )
 
         return y
 

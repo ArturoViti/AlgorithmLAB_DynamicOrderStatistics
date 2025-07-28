@@ -38,13 +38,13 @@ class OrderedList(OrderStatisticStructure):
 
         new_list_node = ListNode(new_node.getValue())
 
-        if self.head is None or new_node < self.head:
+        if self.head is None or new_node <= self.head:
             new_list_node.setNext(self.head)
             self.head = new_list_node
             return
 
         current = self.head
-        while current.getNext() is not None and current.getNext() < new_node:
+        while current.getNext() is not None and current.getNext() <= new_node:
             current = current.getNext()
 
         new_list_node.setNext(current.getNext())

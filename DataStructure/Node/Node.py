@@ -26,9 +26,19 @@ class Node:
             return self.__value < other.__value
         return NotImplemented
 
+    def __le__(self, other):
+        if isinstance(other, Node):
+            return self.__value <= other.__value
+        return NotImplemented
+
     def __gt__( self, other ):
         if isinstance(other, Node):
             return self.__value > other.__value
+        return NotImplemented
+
+    def __ge__(self, other):
+        if isinstance(other, Node):
+            return self.__value >= other.__value
         return NotImplemented
 
     def __eq__( self, other ):
