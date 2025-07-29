@@ -12,7 +12,7 @@ import traceback
 
 if __name__ == '__main__':
     # Creating Data
-    values = random.sample(range(1, 102), 101)
+    values = random.sample(range(1, 10001), 10000)
     ordered_list = OrderedList()
     binary_tree = BinarySearchTree()
 
@@ -20,7 +20,7 @@ if __name__ == '__main__':
     bstNode = None
     listNodes = []
     treeNodes = []
-    print(values)
+    avlNodes = []
     for value in values:
         ordered_list.insert(value)
         bstNode = binary_tree.insert( bstNode, value )
@@ -31,28 +31,17 @@ if __name__ == '__main__':
     avl_tree = AVLTree()
     root = None
     for val in values:
-        root = avl_tree.insert(root, val)
+        root = avl_tree.insert(val, root)
 
-
-    print("*** Ordered list ***")
-    print(ordered_list)
-    print()
-    print("*** Binary Search Tree ***")
-    print(binary_tree)
-    print()
-    print("*** AVL Tree ***")
-    print(avl_tree)
-    print()
 
     root_bst = binary_tree.getRoot()
     root_avl = avl_tree.getRoot()
     head_list = ordered_list.getHead()
 
-    # dimensione albero / lista
-    size = avl_tree.getRoot().getSize()  # o altro modo
+    size = avl_tree.getRoot().getSize()
 
-    select_queries = random.sample(range(1, 51), 50)
-    rank_queries = random.sample(values, 50)
+    select_queries = random.sample(range(1, 1001), 1000)
+    rank_queries = random.sample(values, 1000)
 
     # OrderedList
     start = time.perf_counter()
@@ -75,16 +64,11 @@ if __name__ == '__main__':
     print(f"BinarySearchTree Time: {end - start:.6f} seconds")
 
     # AVLTree
-    try:
-        start = time.perf_counter()
-        root = avl_tree.getRoot()
-        for k in select_queries:
-            avl_tree.OSSelect(root, k)
-       # for x in avlNodes:
-       #     avl_tree.OSRank(x)
-        end = time.perf_counter()
-        print(f"AVLTree Time: {end - start:.6f} seconds")
-    except Exception as e:
-        print("*** Exception ***")
-        print(e)
-        traceback.print_exc()
+    start = time.perf_counter()
+    root = avl_tree.getRoot()
+    for k in select_queries:
+        avl_tree.OSSelect(root, k)
+    for x in avlNodes:
+         avl_tree.OSRank(x)
+    end = time.perf_counter()
+    print(f"AVLTree Time: {end - start:.6f} seconds")

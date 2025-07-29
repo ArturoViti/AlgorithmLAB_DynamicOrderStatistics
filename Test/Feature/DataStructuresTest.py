@@ -1,8 +1,8 @@
+import random
+
 from DataStructure.AVLTree import AVLTree
 from DataStructure.BinarySearchTree import BinarySearchTree
 from DataStructure.OrderedList import OrderedList
-from DataStructure.Node.Node import Node
-
 
 def testOrderedList():
     # Test 1: Insert a single node
@@ -69,17 +69,14 @@ def testBinarySearchTree():
 
     print("✅ All BinarySearchTree tests passed successfully!")
 
-
 def testAVLTree():
     # Test 1: Create tree and insert single node
     avl = AVLTree()
     root = None
-    avl.insert(root, 10 )
-    assert "V: 10" in str(avl), "❌ Test 1 Failed: single node not found in tree string"
 
-    nodes = [5,6,7]
+    nodes = random.sample(range(1, 102), 101)
     for val in nodes:
-        avl.insert(avl.getRoot(), val)
+        root = avl.insert(val, root)
 
     # Test 2: Check balance factor for root is within [-1, 1]
     def check_balance(node):
@@ -92,11 +89,9 @@ def testAVLTree():
             return False
         return check_balance(node.getLeft()) and check_balance(node.getRight())
 
-    print(avl)
     assert check_balance(avl.getRoot()), "❌ Test 2 Failed: Tree is unbalanced"
 
     print("✅ All AVLTree tests passed successfully!")
-
 
 testOrderedList()
 testBinarySearchTree()
