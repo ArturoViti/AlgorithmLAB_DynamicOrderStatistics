@@ -5,7 +5,7 @@ from DataStructure.Node.Node import Node
 
 class OrderStatisticStructure(ABC):
     @abstractmethod
-    def OSSelect( self, i: int ) -> Node:
+    def OSSelect( self, node: Node, i: int ) -> Node:
         """
             Returns the i-th element in order
         """

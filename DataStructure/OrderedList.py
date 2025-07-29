@@ -14,10 +14,14 @@ class OrderedList(OrderStatisticStructure):
     """
 
     def __init__(self):
-        self.head = None
+        self.__head = None
 
 
-    def insert( self, new_node: Node ) -> None:
+    def getHead(self) -> ListNode:
+        return self.__head
+
+
+    def insert( self, value: int ) -> None:
         """
             Insert a new node into the ordered list, maintaining ascending order.
 
@@ -25,7 +29,7 @@ class OrderedList(OrderStatisticStructure):
             at the correct position so that the list remains sorted in ascending order.
 
             Parameters:
-                new_node (Node): The node to insert. Must be an instance of Node.
+                value (int): The value to insert as ListNode
 
             Raises:
                 TypeError: If new_node is not an instance of Node.
@@ -33,18 +37,19 @@ class OrderedList(OrderStatisticStructure):
             Returns:
                 None
         """
-        if not isinstance(new_node, Node):
-            raise TypeError("Node must be of type DataStructure.Node.Node")
 
-        new_list_node = ListNode(new_node.getValue())
+        if not isinstance(value, int):
+            raise TypeError("Value must be Integer")
 
-        if self.head is None or new_node <= self.head:
-            new_list_node.setNext(self.head)
-            self.head = new_list_node
+        new_list_node = ListNode(value)
+
+        if self.__head is None or new_list_node <= self.__head:
+            new_list_node.setNext(self.__head)
+            self.__head = new_list_node
             return
 
-        current = self.head
-        while current.getNext() is not None and current.getNext() <= new_node:
+        current = self.__head
+        while current.getNext() is not None and current.getNext() <= new_list_node:
             current = current.getNext()
 
         new_list_node.setNext(current.getNext())
@@ -61,19 +66,21 @@ class OrderedList(OrderStatisticStructure):
             Returns:
                 str: A string showing the ordered sequence of node values.
         """
+
         values = []
-        current = self.head
+        current = self.__head
         while current is not None:
             values.append(str(current.getValue()))
             current = current.getNext()
         return " -> ".join(values)
 
+
     # Order Statistics Algorithm
-    def OSSelect( self, i: int ) -> Node:
+    def OSSelect( self, node: ListNode, i: int ) -> Node:
         if i < 1:
             raise IndexError("Index must be >= 1")
 
-        current = self.head
+        current = node
         position = 1
 
         while current is not None:
@@ -85,7 +92,7 @@ class OrderedList(OrderStatisticStructure):
         raise IndexError("Index out of range")
 
     def OSRank( self, x: ListNode ) -> int | None:
-        current = self.head
+        current = self.__head
         position = 1
 
         while current is not None:

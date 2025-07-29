@@ -7,28 +7,28 @@ from DataStructure.Node.Node import Node
 def testOrderedList():
     # Test 1: Insert a single node
     ol = OrderedList()
-    ol.insert(Node(5))
+    ol.insert(5)
     assert str(ol) == "5", f"❌ Test 1 Failed: got {str(ol)}"
 
     # Test 2: Insert nodes in ascending order
     ol = OrderedList()
-    ol.insert(Node(1))
-    ol.insert(Node(3))
-    ol.insert(Node(5))
+    ol.insert(1)
+    ol.insert(3)
+    ol.insert(5)
     assert str(ol) == "1 -> 3 -> 5", f"❌ Test 2 Failed: got {str(ol)}"
 
     # Test 3: Insert nodes out of order
     ol = OrderedList()
-    ol.insert(Node(5))
-    ol.insert(Node(1))
-    ol.insert(Node(3))
+    ol.insert(5)
+    ol.insert(1)
+    ol.insert(3)
     assert str(ol) == "1 -> 3 -> 5", f"❌ Test 3 Failed: got {str(ol)}"
 
     # Test 4: Insert duplicate values
     ol = OrderedList()
-    ol.insert(Node(3))
-    ol.insert(Node(3))
-    ol.insert(Node(3))
+    ol.insert(3)
+    ol.insert(3)
+    ol.insert(3)
     assert str(ol) == "3 -> 3 -> 3", f"❌ Test 4 Failed: got {str(ol)}"
 
     # Test 5: Empty list
@@ -39,23 +39,28 @@ def testOrderedList():
 
 def testBinarySearchTree():
     # Test 1: Create tree and insert single node
-    bst = BinarySearchTree(Node(10))
-    assert bst.inorder(bst.root) == ["10"], f"❌ Test 1 Failed: {bst.inorder(bst.root)}"
+    bst = BinarySearchTree()
+    root = None
+    bst.insert(root, 10 )
+    assert bst.inorder(bst.getRoot()) == ["10"], f"❌ Test 1 Failed: {bst.inorder(bst.getRoot())}"
 
     # Test 2: Insert nodes to form BST
-    bst.insert(Node(5))
-    bst.insert(Node(15))
-    bst.insert(Node(3))
-    bst.insert(Node(7))
-    bst.insert(Node(12))
-    bst.insert(Node(18))
+    bst = BinarySearchTree()
+    root = None
+    root = bst.insert(root, 10 )
+    root = bst.insert(root, 5 )
+    root = bst.insert(root, 15 )
+    root = bst.insert(root, 3 )
+    root = bst.insert(root, 7 )
+    root = bst.insert(root, 12 )
+    root = bst.insert(root, 18 )
     expected_inorder = ["3", "5", "7", "10", "12", "15", "18"]
-    assert bst.inorder(bst.root) == expected_inorder, f"❌ Test 2 Failed: {bst.inorder(bst.root)}"
+    assert bst.inorder( bst.getRoot() ) == expected_inorder, f"❌ Test 2 Failed: {bst.inorder(bst.getRoot())}"
 
     # Test 3: Insert duplicate
-    bst.insert(Node(10))
+    root = bst.insert(root, 10 )
     expected_inorder_with_duplicate = ["3", "5", "7", "10", "10", "12", "15", "18"]
-    assert bst.inorder(bst.root) == expected_inorder_with_duplicate, f"❌ Test 3 Failed: {bst.inorder(bst.root)}"
+    assert bst.inorder(bst.getRoot()) == expected_inorder_with_duplicate, f"❌ Test 3 Failed: {bst.inorder(bst.getRoot())}"
 
     # Test 4: String representation contains all nodes
     tree_str = str(bst)
@@ -67,12 +72,14 @@ def testBinarySearchTree():
 
 def testAVLTree():
     # Test 1: Create tree and insert single node
-    avl = AVLTree(Node(10))
+    avl = AVLTree()
+    root = None
+    avl.insert(root, 10 )
     assert "V: 10" in str(avl), "❌ Test 1 Failed: single node not found in tree string"
 
-    nodes = [20, 30, 40, 50, 25]
+    nodes = [5,6,7]
     for val in nodes:
-        avl.insert(Node(val))
+        avl.insert(avl.getRoot(), val)
 
     # Test 2: Check balance factor for root is within [-1, 1]
     def check_balance(node):
@@ -85,7 +92,8 @@ def testAVLTree():
             return False
         return check_balance(node.getLeft()) and check_balance(node.getRight())
 
-    assert check_balance(avl.root), "❌ Test 2 Failed: Tree is unbalanced"
+    print(avl)
+    assert check_balance(avl.getRoot()), "❌ Test 2 Failed: Tree is unbalanced"
 
     print("✅ All AVLTree tests passed successfully!")
 

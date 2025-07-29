@@ -22,26 +22,41 @@ class Node:
 
     # Enables intuitive comparison between Node instances using <, >, and == operators
     def __lt__( self, other ):
+        if other is None:
+            return False
+
         if isinstance(other, Node):
             return self.__value < other.__value
         return NotImplemented
 
     def __le__(self, other):
+        if other is None:
+            return False
+
         if isinstance(other, Node):
             return self.__value <= other.__value
         return NotImplemented
 
     def __gt__( self, other ):
+        if other is None:
+            return False
+
         if isinstance(other, Node):
             return self.__value > other.__value
         return NotImplemented
 
     def __ge__(self, other):
+        if other is None:
+            return False
+
         if isinstance(other, Node):
             return self.__value >= other.__value
         return NotImplemented
 
     def __eq__( self, other ):
+        if other is None:
+            return False
+
         if isinstance(other, Node):
             return self.__value == other.__value
         return NotImplemented

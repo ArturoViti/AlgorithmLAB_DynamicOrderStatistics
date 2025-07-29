@@ -9,23 +9,30 @@ class AVLTree:
         between its left and right subtrees is at most 1.
 
         Attributes:
-            root (AVLNode): The root of the AVL tree.
+            __root (AVLNode): The root of the AVL tree.
     """
 
-    def __init__(self, node):
-        if not isinstance(node, Node):
-            raise TypeError("Node must be of type DataStructure.Node.Node")
-        self.root = AVLNode(node.getValue())
+    def __init__(self, value: int|None = None ):
+        if value is None:
+            self.__root = None
+        else:
+            if not isinstance(value, int):
+                raise TypeError("Value must be integer")
+            self.__root = AVLNode(value)
+
+
+    def getRoot(self) -> AVLNode:
+        return self.__root
 
 
     @staticmethod
-    def height( node: AVLNode ):
+    def height( node: AVLNode ) -> int:
         if not node:
             return 0
         return node.getHeight()
 
     @staticmethod
-    def size( node: AVLNode ):
+    def size( node: AVLNode ) -> int:
         if not node:
             return 0
         return node.getSize()
@@ -46,77 +53,69 @@ class AVLTree:
             return 0
         return self.height(node.getLeft()) - self.height(node.getRight())
 
+    def insert(self, node: AVLNode | None, key: int) -> AVLNode:
+        if node is None:
+            newerNode = AVLNode(key)
+            if self.__root is None:
+                self.__root = newerNode
+            return newerNode
 
-    def insert( self, node ) -> None:
-        """
-            Insert a new node into the AVL tree, rebalancing if necessary.
-
-            Parameters:
-                node (Node): The node to insert.
-
-            Raises:
-                TypeError: If the input is not an instance of Node.
-        """
-
-        if not isinstance(node, Node):
-            raise TypeError("Node must be of type DataStructure.Node.Node")
-        avl_node = AVLNode(node.getValue())
-        self.root = self._insert_recursive(self.root, avl_node)
-
-
-    def _insert_recursive(self, current: AVLNode, new_node: AVLNode) -> AVLNode:
-        """
-            Helper method to recursively insert a node and rebalance the subtree.
-
-            Parameters:
-                current_node (AVLNode): Current node in recursion.
-                new_node (AVLNode): New node to be inserted.
-
-            Returns:
-                AVLNode: The root of the balanced subtree.
-       """
-
-        if current is None:
-            return new_node
-
-        if new_node <= current:
-            current.setLeft(self._insert_recursive(current.getLeft(), new_node))
-        elif new_node > current:
-            current.setRight(self._insert_recursive(current.getRight(), new_node))
+        if key < node.getValue():
+            child = self.insert(node.getLeft(), key)
+            node.setLeft(child)
+            child.setParent(node)
+        elif key > node.getValue():
+            child = self.insert(node.getRight(), key)
+            node.setRight(child)
+            child.setParent(node)
         else:
-            return current
+            return node
 
-        left = current.getLeft()
-        right = current.getRight()
-        lh = left.getHeight() if left else 0
-        rh = right.getHeight() if right else 0
-        current.setHeight(1 + max(lh, rh))
+        # Update height and size
+        node.setHeight(1 + max(self.height(node.getLeft()), self.height(node.getRight())))
+        node.setSize(1 + self.size(node.getLeft()) + self.size(node.getRight()))
 
-        ls = left.getSize() if left else 0
-        rs = right.getSize() if right else 0
-        current.setSize(1 + ls + rs)
+        # Rebalance
+        balance = self.balance(node)
 
-        balance = lh - rh
+        # Left Left
+        if balance > 1 and key < node.getLeft().getValue():
+            new_root = self._right_rotate(node)
+            if new_root.getParent() is None:
+                self.__root = new_root
+            return new_root
 
-        # LL
-        if balance > 1 and new_node < left:
-            return self._right_rotate(current)
-        # RR
-        if balance < -1 and new_node > right:
-            return self._left_rotate(current)
-        # LR
-        if balance > 1 and new_node > left:
-            current.setLeft(self._left_rotate(left))
-            return self._right_rotate(current)
-        # RL
-        if balance < -1 and new_node < right:
-            current.setRight(self._right_rotate(right))
-            return self._left_rotate(current)
+        # Right Right
+        if balance < -1 and key > node.getRight().getValue():
+            new_root = self._left_rotate(node)
+            if new_root.getParent() is None:
+                self.__root = new_root
+            return new_root
 
-        return current
+        # Left Right
+        if balance > 1 and key > node.getLeft().getValue():
+            node.setLeft(self._left_rotate(node.getLeft()))
+            node.getLeft().setParent(node)
+            new_root = self._right_rotate(node)
+            if new_root.getParent() is None:
+                self.__root = new_root
+            return new_root
 
+        # Right Left
+        if balance < -1 and key < node.getRight().getValue():
+            node.setRight(self._right_rotate(node.getRight()))
+            node.getRight().setParent(node)
+            new_root = self._left_rotate(node)
+            if new_root.getParent() is None:
+                self.__root = new_root
+            return new_root
 
-    def _left_rotate(self,y: AVLNode) -> AVLNode:
+        if node.getParent() is None:
+            self.__root = node
+
+        return node
+
+    def _left_rotate( self, y: AVLNode ) -> AVLNode:
         """
             Perform a left rotation around the given node.
 
@@ -126,7 +125,6 @@ class AVLTree:
             Returns:
                 AVLNode: The new root of the rotated subtree.
         """
-
         x = y.getRight()
         T2 = x.getLeft()
 
@@ -185,7 +183,7 @@ class AVLTree:
 
 
     def __str__(self) -> str:
-        return self._tree_to_string(self.root)
+        return self._tree_to_string(self.__root)
 
     def _tree_to_string( self, node: AVLNode, level = 0 ) -> str:
         """
@@ -209,27 +207,26 @@ class AVLTree:
 
 
     # Order Statistics Algorithm
-    def OSSelect( self, i: int ) -> AVLNode:
-        return self._os_select(self.root, i)
-
-    def _os_select( self, node: AVLNode, i: int ) -> AVLNode | None:
+    def OSSelect( self, node: AVLNode, i: int ) -> AVLNode | None:
         rank = (node.getLeft().getSize() if node.getLeft() else 0) + 1
 
         if i == rank:
             return node
         elif i < rank:
-            return self._os_select( node.getLeft(), i )
+            return self.OSSelect(node.getLeft(), i)
         else:
-            return self._os_select( node.getRight(), i - rank )
+            return self.OSSelect(node.getRight(), i - rank)
 
-
-    def OSRank( self, x: AVLNode ) -> int:
+    def OSRank(self, x: AVLNode) -> int:
         rank = (x.getLeft().getSize() if x.getLeft() else 0) + 1
         node = x
 
-        while node != self.root:
-           if node == node.getParent().getRight():
-               rank += node.getParent().getLeft().getSize() + 1
-           node = node.getParent()
+        while node != self.__root:
+            parent = node.getParent()
+            if node == parent.getRight():
+                left_size = parent.getLeft().getSize() if parent.getLeft() else 0
+                rank += left_size + 1
+            node = parent
 
         return rank
+
