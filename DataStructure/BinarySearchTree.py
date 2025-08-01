@@ -94,7 +94,7 @@ class BinarySearchTree(OrderStatisticStructure):
             Returns:
                 int: Number of nodes in the subtree.
         """
-        if not node:
+        if node is None:
             return 0
         return 1 + self._subtree_size(node.getLeft()) + self._subtree_size(node.getRight())
 
@@ -134,16 +134,20 @@ class BinarySearchTree(OrderStatisticStructure):
             :param node:
         """
 
-        rank = (self._subtree_size(node.getLeft())) + 1
-        node_t = node
+        rank = 0
+        x = self.__root
+        key = node.getValue()
 
-        while node_t != self.__root:
-            parent = node_t.getParent()
-            if node_t == parent.getRight():
-                left_size = self._subtree_size(parent.getLeft())
-                rank += left_size + 1
-            z = parent
+        while x is not None:
+            if key < x.getValue():
+                x = x.getLeft()
+            elif key > x.getValue():
+                rank += 1 + self._subtree_size(x.getLeft())
+                x = x.getRight()
+            else:
+                rank += self._subtree_size(x.getLeft())
+                break
 
-        return rank
+        return rank + 1
 
 
