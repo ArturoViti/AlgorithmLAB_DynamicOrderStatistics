@@ -127,19 +127,6 @@ class PlotManager:
             ys = [results_by_n[n][structure] for n in ns]
             plt.plot(ns, ys, marker='o', label=structure)
 
-        # Compute reference complexity curves (normalized for comparison)
-        max_n = max(ns)
-        normalized_n = np.array(ns) / max_n
-        ref_n = normalized_n
-        ref_log_n = np.log2(ns) / np.log2(max_n)
-        ref_nlogn = ref_n * ref_log_n
-
-        # Scale reference curves to fit the plot visually
-        max_y = max([results_by_n[n][s] for n in ns for s in structures])
-        plt.plot(ns, ref_log_n * max_y, 'k--', label="O(log n)")
-        plt.plot(ns, ref_n * max_y, 'k-.', label="O(n)")
-        plt.plot(ns, ref_nlogn * max_y, 'k:', label="O(n log n)")
-
         plt.title(f"{operation_name} Time vs n")
         plt.xlabel("n (number of elements)")
         plt.ylabel("Time (seconds)")

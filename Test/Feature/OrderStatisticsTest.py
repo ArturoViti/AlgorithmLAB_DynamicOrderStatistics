@@ -49,6 +49,7 @@ def BSTTestOSSelectOSSRank():
     # Order and select value
     inorder_expected = sorted(values)
     startRoot = bst.getRoot()
+    print(bst)
     for i in range(1, len(values) + 1):
         # i-th the smallest key...
         node = bst.OSSelect(startRoot, i)
@@ -70,6 +71,8 @@ def BSTTestOSSelectOSSRank():
         node = findNodeByValueHelper(startRoot, value)
         rank = bst.OSRank(node)
         print(f"OSRank({value}):", rank)
+        print(f"Index + 1 ({value}):", idx + 1 )
+
         assert rank == idx + 1, f"❌ Error on OSRank({value})"
 
     print("\n ✅ All BST Tests of OSSelect and OSRank Passed")
@@ -80,18 +83,18 @@ def AVLTreeTestOSSelectOSSRank():
     root = None
     avl = AVLTree()
     for v in values:
-        root = avl.insert(root, v)
+        root = avl.insert(v, root)
 
     print("AVL Tree:")
     print(avl)
 
     inorder_expected = sorted(values)
     print("\nOSSelect Test:")
-    startRoot = avl.getRoot()
+    root = avl.getRoot()
     for i in range(1, len(values) + 1):
         print(i)
-        node = avl.OSSelect(startRoot, i)
-        print(startRoot)
+        node = avl.OSSelect(root, i)
+        print(node)
         print(f"OSSelect({i}) -> {node.getValue()}")
         print("On Expected({i}) -> ", inorder_expected[i - 1])
         assert node.getValue() == inorder_expected[i - 1], f"❌ Error on OSSelect({i})"
@@ -108,7 +111,7 @@ def AVLTreeTestOSSelectOSSRank():
 
     print("\nOSRank Test:")
     for idx, value in enumerate(inorder_expected):
-        node = findNodeByValueHelper(startRoot, value)
+        node = findNodeByValueHelper(root, value)
         rank = avl.OSRank(node)
         print(f"OSRank({value}) -> {rank}")
         assert rank == idx + 1, f"❌ Error on OSRank({value})"

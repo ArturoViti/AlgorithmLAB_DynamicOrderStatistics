@@ -11,7 +11,7 @@ from pympler import asizeof
 
 
 # Sizes
-def get_list_memory_usage(head):
+def get_list_memory_usage(head: ListNode):
     """
         Calculate the total memory usage of a linked list.
 
@@ -42,7 +42,7 @@ def get_list_memory_usage(head):
 
 if __name__ == '__main__':
     TRIALS_PER_N = 0
-    N_VALUES = [1000, 2000, 4000, 6000, 8000, 10000, 14000, 18000, 20000, 24000, 26000, 28000, 30000]
+    N_VALUES = [1000, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000, 18000, 20000, 22000, 24000, 26000, 28000, 30000]
 
     osselect_results = {}
     osrank_results = {}

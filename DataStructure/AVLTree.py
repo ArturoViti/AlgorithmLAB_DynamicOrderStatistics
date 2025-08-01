@@ -1,6 +1,7 @@
+from DataStructure.BinarySearchTree import BinarySearchTree
 from DataStructure.Node.AVLNode import AVLNode
 
-class AVLTree:
+class AVLTree(BinarySearchTree):
     """
         AVLTree implements a self-balancing binary search tree using AVLNode.
 
@@ -11,31 +12,20 @@ class AVLTree:
             __root (AVLNode): The root of the AVL tree.
     """
 
-    def __init__(self, value: int|None = None ):
-        if value is None:
-            self.__root = None
-        else:
-            if not isinstance(value, int):
-                raise TypeError("Value must be integer")
-            self.__root = AVLNode(value)
-
+    def __init__(self, value: int | None = None):
+        super().__init__(value)
+        self.__root = AVLNode(value) if value is not None else None
 
     def getRoot(self) -> AVLNode:
         return self.__root
 
+    @staticmethod
+    def height(node: AVLNode) -> int:
+        return node.getHeight() if node else 0
 
     @staticmethod
-    def height( node: AVLNode ) -> int:
-        if not node:
-            return 0
-        return node.getHeight()
-
-    @staticmethod
-    def size( node: AVLNode ) -> int:
-        if not node:
-            return 0
-        return node.getSize()
-
+    def size(node: AVLNode) -> int:
+        return node.getSize() if node else 0
 
     def balance( self, node: AVLNode ) -> int:
         """
@@ -47,10 +37,8 @@ class AVLTree:
             Returns:
                 int: The balance factor (left height - right height).
         """
+        return self.height(node.getLeft()) - self.height(node.getRight()) if node else 0
 
-        if not node:
-            return 0
-        return self.height(node.getLeft()) - self.height(node.getRight())
 
 
     def insert(self, key: int, node: AVLNode | None = None) -> AVLNode:
@@ -105,23 +93,19 @@ class AVLTree:
 
         balance = self.balance(node)
 
-        # Left-Left
-        if balance > 1 and key < node.getLeft().getValue():
-            return self._right_rotate(node)
+        if balance > 1:
+            if key < node.getLeft().getValue():
+                return self._right_rotate(node)
+            else:
+                node.setLeft(self._left_rotate(node.getLeft()))
+                return self._right_rotate(node)
 
-        # Right-Right
-        if balance < -1 and key > node.getRight().getValue():
-            return self._left_rotate(node)
-
-        # Left-Right
-        if balance > 1 and key > node.getLeft().getValue():
-            node.setLeft(self._left_rotate(node.getLeft()))
-            return self._right_rotate(node)
-
-        # Right-Left
-        if balance < -1 and key < node.getRight().getValue():
-            node.setRight(self._right_rotate(node.getRight()))
-            return self._left_rotate(node)
+        if balance < -1:
+            if key > node.getRight().getValue():
+                return self._left_rotate(node)
+            else:
+                node.setRight(self._right_rotate(node.getRight()))
+                return self._left_rotate(node)
 
         return node
 
@@ -186,8 +170,8 @@ class AVLTree:
         x.setHeight( 1 + max(self.height(x.getLeft()), self.height(x.getRight())) )
 
         # Update sizes
-        x.setSize( 1 + self.size(x.getLeft()) + self.size(x.getRight()) )
         y.setSize( 1 + self.size(y.getLeft()) + self.size(y.getRight()) )
+        x.setSize( 1 + self.size(x.getLeft()) + self.size(x.getRight()) )
 
         return x
 
@@ -230,7 +214,9 @@ class AVLTree:
         """
         if node is None:
             return None
-        rank = (node.getLeft().getSize() if node.getLeft() else 0) + 1
+
+        left_size = self.size(node.getLeft())
+        rank = left_size + 1
 
         if i == rank:
             return node
@@ -250,14 +236,13 @@ class AVLTree:
             Returns:
                 int: The rank of the node.
         """
-        rank = (x.getLeft().getSize() if x.getLeft() else 0) + 1
+        rank = self.size(x.getLeft()) + 1
         node = x
 
         while node != self.__root:
             parent = node.getParent()
             if node == parent.getRight():
-                left_size = parent.getLeft().getSize() if parent.getLeft() else 0
-                rank += left_size + 1
+                rank += self.size(parent.getLeft()) + 1
             node = parent
 
         return rank

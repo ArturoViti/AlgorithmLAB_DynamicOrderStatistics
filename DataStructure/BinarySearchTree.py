@@ -134,20 +134,13 @@ class BinarySearchTree(OrderStatisticStructure):
             :param node:
         """
 
-        rank = 0
-        x = self.__root
-        key = node.getValue()
+        def _os_rank( node: TreeNode, x: int ) -> int:
+            if node is None:
+                return 0
 
-        while x is not None:
-            if key < x.getValue():
-                x = x.getLeft()
-            elif key > x.getValue():
-                rank += 1 + self._subtree_size(x.getLeft())
-                x = x.getRight()
+            if node.getValue() <= x:
+                return 1 + _os_rank(node.getLeft(), x) + _os_rank(node.getRight(), x)
             else:
-                rank += self._subtree_size(x.getLeft())
-                break
+                return _os_rank(node.getLeft(), x)
 
-        return rank + 1
-
-
+        return _os_rank(self.__root, node.getValue())
