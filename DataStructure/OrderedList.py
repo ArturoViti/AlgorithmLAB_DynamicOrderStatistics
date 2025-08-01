@@ -76,7 +76,17 @@ class OrderedList(OrderStatisticStructure):
 
 
     # Order Statistics Algorithm
-    def OSSelect( self, node: ListNode, i: int ) -> Node:
+    def OSSelect( self, node: ListNode, i: int ) -> ListNode:
+        """
+            Return the i-th smallest node. List is ordered, so simply iterate through
+
+            Parameters:
+                node (ListNode): The start of OrderedList
+                i (int): Index
+
+            Returns:
+                ListNode | None: The corresponding node or None if out of bounds.
+        """
         if i < 1:
             raise IndexError("Index must be >= 1")
 
@@ -92,6 +102,15 @@ class OrderedList(OrderStatisticStructure):
         raise IndexError("Index out of range")
 
     def OSRank( self, x: ListNode ) -> int | None:
+        """
+            Return the rank (1-based index on iteration) of node x.
+
+            Parameters:
+                x (ListNode): The node whose rank we want to find.
+
+            Returns:
+                int: The rank of the node, index of Ordered List
+        """
         current = self.__head
         position = 1
 

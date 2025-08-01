@@ -70,7 +70,6 @@ def testBinarySearchTree():
     print("✅ All BinarySearchTree tests passed successfully!")
 
 def testAVLTree():
-    # Test 1: Create tree and insert single node
     avl = AVLTree()
     root = None
 

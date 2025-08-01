@@ -54,6 +54,19 @@ class AVLTree:
 
 
     def insert(self, key: int, node: AVLNode | None = None) -> AVLNode:
+        """
+            Insert a key into the AVL tree.
+
+            If no node is provided, insertion begins at the tree's root.
+            Updates the root reference if necessary.
+
+            Parameters:
+                key (int): The value to insert into the tree.
+                node (AVLNode, optional): The starting node for insertion. Defaults to None.
+
+            Returns:
+                AVLNode: The updated root of the subtree after insertion.
+        """
         if node is None:
             node = self.__root
         node = self._insert(node, key)
@@ -62,6 +75,19 @@ class AVLTree:
 
 
     def _insert(self, node: AVLNode | None, key: int) -> AVLNode:
+        """
+            Recursively insert a key into the AVL tree and rebalance the tree if needed.
+
+            This method updates the height and size of nodes and performs the necessary
+            rotations to maintain AVL balance.
+
+            Parameters:
+                node (AVLNode | None): The root of the current subtree.
+                key (int): The value to insert.
+
+            Returns:
+                AVLNode: The updated node after insertion and rebalancing.
+        """
         if node is None:
             return AVLNode(key)
 
@@ -104,7 +130,7 @@ class AVLTree:
             Perform a left rotation around the given node.
 
             Parameters:
-                y (AVLNode): The root of the subtree to rotate.
+                x (AVLNode): The root of the subtree to rotate.
 
             Returns:
                 AVLNode: The new root of the rotated subtree.
@@ -138,7 +164,7 @@ class AVLTree:
             Perform a right rotation around the given node.
 
             Parameters:
-                z (AVLNode): The root of the subtree to rotate.
+                y (AVLNode): The root of the subtree to rotate.
 
             Returns:
                 AVLNode: The new root of the rotated subtree.
@@ -192,6 +218,16 @@ class AVLTree:
 
     # Order Statistics Algorithm
     def OSSelect( self, node: AVLNode, i: int ) -> AVLNode | None:
+        """
+            Return the i-th smallest node (with rank i in an inorder traversal), using size
+
+            Parameters:
+                node (TreeNode): The root of the subtree.
+                i (int): Index
+
+            Returns:
+                TreeNode | None: The corresponding node or None if out of bounds.
+        """
         if node is None:
             return None
         rank = (node.getLeft().getSize() if node.getLeft() else 0) + 1
@@ -203,7 +239,17 @@ class AVLTree:
         else:
             return self.OSSelect(node.getRight(), i - rank)
 
+
     def OSRank(self, x: AVLNode) -> int:
+        """
+            Return the rank (1-based index in inorder traversal) of node x, using size
+
+            Parameters:
+                x (AVLNode): The node whose rank we want to find.
+
+            Returns:
+                int: The rank of the node.
+        """
         rank = (x.getLeft().getSize() if x.getLeft() else 0) + 1
         node = x
 
