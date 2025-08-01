@@ -122,27 +122,28 @@ class BinarySearchTree(OrderStatisticStructure):
         else:
             return self.OSSelect(node.getRight(), i - left_size - 1)
 
-    def OSRank( self, x: TreeNode ) -> int:
+    def OSRank( self, node: TreeNode ) -> int:
         """
-            Return the rank (1-based index in inorder traversal) of node x.
+        Return the rank (0-based index in inorder traversal) of a given value in the BST.
 
-            Parameters:
-                x (TreeNode): The node whose rank we want to find.
+        Parameters:
+            node (TreeNode): The node to find the rank of.
 
-            Returns:
-                int: The rank of the node.
+        Returns:
+            int: The rank (number of nodes with value < input value).
+            :param node:
         """
-        node = self.__root
-        rank = 0
 
-        while node:
-            if x < node:
-                node = node.getLeft()
-            elif x > node:
-                rank += self._subtree_size(node.getLeft()) + 1
-                node = node.getRight()
-            else:
-                rank += self._subtree_size(node.getLeft()) + 1
-                break
+        rank = (self._subtree_size(node.getLeft())) + 1
+        node_t = node
+
+        while node_t != self.__root:
+            parent = node_t.getParent()
+            if node_t == parent.getRight():
+                left_size = self._subtree_size(parent.getLeft())
+                rank += left_size + 1
+            z = parent
 
         return rank
+
+

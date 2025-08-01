@@ -65,9 +65,9 @@ if __name__ == '__main__':
 
         for value in values:
             ordered_list.insert(value)
-            bstNode = binary_tree.insert(bstNode, value)
+            bstNode = binary_tree.insert(binary_tree.getRoot(), value)
             listNodes.append(ListNode(value))
-            treeNodes.append(TreeNode(value))
+            treeNodes.append(bstNode)
             root_avl = avl_tree.insert(value, root_avl)
             avlNodes.append(root_avl)
 
