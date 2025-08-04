@@ -138,7 +138,7 @@ class BinarySearchTree(OrderStatisticStructure):
             if node is None:
                 return 0
 
-            if node.getValue() <= x:
+            if node.getValue() < x:
                 return 1 + _os_rank(node.getLeft(), x) + _os_rank(node.getRight(), x)
             else:
                 return _os_rank(node.getLeft(), x)
