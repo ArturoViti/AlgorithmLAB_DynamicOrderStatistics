@@ -40,10 +40,10 @@ class BinarySearchTree(OrderStatisticStructure):
                 self.__root = newerNode
             return newerNode
 
-        if root.getValue() <= value:
-            root.setRight( self.insert(root.getRight(), value) )
+        if root.getValue() < value:
+            root.setLeft(self.insert(root.getLeft(), value))
         else:
-            root.setLeft( self.insert(root.getLeft(), value) )
+            root.setRight(self.insert(root.getRight(), value))
         return root
 
     def inorder( self, root: TreeNode ):
