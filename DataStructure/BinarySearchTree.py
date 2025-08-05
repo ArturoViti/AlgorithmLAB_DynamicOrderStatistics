@@ -40,7 +40,7 @@ class BinarySearchTree(OrderStatisticStructure):
                 self.__root = newerNode
             return newerNode
 
-        if root.getValue() < value:
+        if value < root.getValue():
             root.setLeft(self.insert(root.getLeft(), value))
         else:
             root.setRight(self.insert(root.getRight(), value))

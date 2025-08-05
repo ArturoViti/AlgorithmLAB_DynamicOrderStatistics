@@ -42,7 +42,7 @@ def get_list_memory_usage(head: ListNode):
 
 if __name__ == '__main__':
     TRIALS_PER_N = 0
-    N_VALUES = [1000, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000, 18000, 20000, 22000, 24000, 26000, 28000, 30000]
+    N_VALUES = [10, 20, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240, 20480]
 
     osselect_results = {}
     osrank_results = {}
@@ -69,7 +69,8 @@ if __name__ == '__main__':
             listNodes.append(ListNode(value))
             treeNodes.append(bstNode)
             root_avl = avl_tree.insert(value, root_avl)
-            avlNodes.append(root_avl)
+
+        avlNodes = avl_tree.tree_to_list_inorder(avl_tree.getRoot())
 
         # Select only half of total
         TRIALS_PER_N = VALUES_NUMBER

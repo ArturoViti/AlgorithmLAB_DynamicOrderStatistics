@@ -247,3 +247,21 @@ class AVLTree(BinarySearchTree):
 
         return rank
 
+    def tree_to_list_inorder(self, node: AVLNode | None, nodes: list[AVLNode] = None) -> list[AVLNode]:
+        """
+        Helper method to traverse the AVL tree and collect nodes in in-order.
+
+        Parameters:
+            node (AVLNode | None): The current node in the traversal.
+            nodes (list[AVLNode], optional): Accumulator list for nodes.
+
+        Returns:
+            list[AVLNode]: List of AVL nodes in in-order.
+        """
+        if nodes is None:
+            nodes = []
+        if node is not None:
+            self.tree_to_list_inorder(node.getLeft(), nodes)
+            nodes.append(node)
+            self.tree_to_list_inorder(node.getRight(), nodes)
+        return nodes
